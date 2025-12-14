@@ -2,29 +2,60 @@ local State = {}
 
 --*Const
 State.Config = {
-    FINISH = {vec(581,70,-2036), vec(603,76,-2030)},
-    PITSTOP = {
-        In = {vec(596,70,-1863), vec(606,76,-1848)},
-        Out = {vec(612,0,-2096), vec(623,76,-2091)},
+    TRACK = {
+        name = "МП2 Grand prix",
+        sectors = {
+            {
+                id = "S1",
+                inBox = {vec(605,70,-2189), vec(629,76,-2185)},
+                outBox = {vec(579,70,-2505), vec(618,76,-2500)},
+            },
+            {
+                id = "S2",
+                inBox = {vec(496,70,-2061), vec(524,76,-2054)},
+                outBox = {vec(399,70,-1884), vec(411,76,-1850)},
+            },
+            {
+                id = "S3",
+                inBox = {vec(439,70,-1897), vec(445,76,-1877)},
+                outBox = {vec(558,70,-1813), vec(589,76,-1806)},
+            },
+        },
+
+        finish = {
+            box = {vec(581,70,-2036), vec(604,76,-2030)}
+        },
+
+        pitStop = {
+            inBox = {vec(596,70,-1863), vec(606,76,-1848)},
+            outBox = {vec(612,0,-2096), vec(624,76,-2091)},
+        },
     },
 
-    FIRST_SECTOR = {
-        In = {vec(605,70,-2189), vec(628,76,-2185)},
-        Out = {vec(579,70,-2505), vec(617,76,-2500)},
-    },
-    SECOND_SECTOR = {
-        In = {vec(498,70,-2061), vec(523,76,-2054)},
-        Out = {vec(399,70,-1879), vec(411,76,-1851)},
-    },
-    THIRD_SECTOR = {
-        In = {vec(439,70,-1897), vec(445,76,-1877)},
-        Out = {vec(559,70,-1813), vec(588,76,-1806)},
+    RACE = {
+        laps = 50,
+        countPitTime = false,
     },
 
-    RACISTS = {
-        NickName = true,
-        CoBeHok = true,
-        Anzorik = true,
+    TEAMS = {
+        {
+            id = "TeamName",
+            color = "§f",
+            racists = {
+                {name = "NickName", role = "main"},
+                {name = "AnotherName", role = "reserve"},
+            }
+        },
+
+        {
+            id = "Мамкины Ядерщики",
+            color = "§6",
+            racists = {
+                {name = "CoBeHok", role = "main"},
+                {name = "DodgerF", role = "reserve"},
+                {name = "Romul_Us", role = "reserve"}
+            }
+        }
     }
 }
 
@@ -39,11 +70,11 @@ State.Data = {
     
 
     checkBox = {vec(0,0,0), vec(0,0,0)},
-    isCheckBoxCreated = false,
+    isCheckBoxCreated = true,
     inCheckBox = false,
     wasInCheckBox = false,
 
-    renderBox = false
+    renderBox = true
 }
 
 State.Settings = {

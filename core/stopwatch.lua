@@ -3,10 +3,7 @@ local render = require("ui.render")
 
 local Stopwatch = {}
 
-local cfg = state.Config
 local data = state.Data
-local input = state.Input
-local obj = state.Objects
 
 local cbx = data.checkBox
 
@@ -71,9 +68,9 @@ end
 
 --*Changing trigger box on wheel scroll
 function Stopwatch.changeBox(dir)
-    local alt = obj.ALTKEY:isPressed()
-    local ctrl = obj.CTRLKEY:isPressed()
-    local shift = obj.SHIFTKEY:isPressed()
+    local alt = false
+    local ctrl = false
+    local shift = false
 
     local pos = player:getPos()
     local look = player:getLookDir():normalize()
@@ -145,11 +142,19 @@ end
 --*Main tick function
 function Stopwatch.tick()
     --.Chechbox frame render
-    if data.renderBox and data.isCheckBoxCreated then
-        if world.getTime() % 5 == 0 then
-            render.spawnEdgeParticles(data.checkBox[1], data.checkBox[2])
-        end
-    end
+    -- if data.renderBox and data.isCheckBoxCreated then
+    --     if world.getTime() % 5 == 0 then
+    --         for _, trigger in pairs(state.Config.TRIGGERS) do
+    --             if trigger[1] then
+    --                 render.spawnEdgeParticles(trigger[1], trigger[2])
+    --             else
+    --                 for _, zone in pairs(trigger) do
+    --                     render.spawnEdgeParticles(zone[1], zone[2])
+    --                 end
+    --             end
+    --         end
+    --     end
+    -- end
 
     if not data.isClocking then return end
 

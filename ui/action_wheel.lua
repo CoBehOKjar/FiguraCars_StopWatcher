@@ -1,11 +1,8 @@
 local state = require("state")
-local stopwatch = require("lib.stopwatch")
+local stopwatch = require("core.stopwatch")
 
 local ActionWheel = {}
 
-local cfg = state.Config
-local obj = state.Objects
-local stgs = state.Settings
 local data = state.Data
 
 function ActionWheel.titleUpdate(action, title)
@@ -35,8 +32,6 @@ function ActionWheel.init()
             :onRightClick(function()
                 action_wheel:setPage(wheels[nextIndex])
             end)
-
-        obj.AW["Nav"..i] = nav
     end
 
     --.Adding buttons
@@ -56,7 +51,6 @@ function ActionWheel.init()
         :onLeftClick(function() stopwatch.setBox(1, player:getPos(), true) end)
         :onRightClick(function() stopwatch.setBox(2, player:getPos(), true) end)
         :onScroll(stopwatch.changeBox)
-    obj.AW.camHeight = setBox
 
     local toggleStopwatch = wheels[1]:newAction()
         :title("Запустить/остановить секундомер\n§7ЛКМ/ПКМ")
@@ -71,13 +65,11 @@ function ActionWheel.init()
             data.lastTime = 0
             print("Таймер остановлен")
         end)
-    obj.AW.camHeight = toggleStopwatch
 
     local toggleRender = wheels[1]:newAction()
         :title("Постоянный рендер зоны секундомера")
         :item("minecraft:spawner")
         :onToggle(function() ActionWheel.toggleBoxRender(not data.renderBox) end)
-    obj.AW.camHeight = toggleRender
 end
 
 
