@@ -5,6 +5,7 @@ local setup = require("core.setup")
 local stopwatch = require("core.stopwatch")
 
 local util = require("lib.utilities")
+local wand = require("lib.wand")
 
 local action_wheel = require("ui.action_wheel")
 local render = require("ui.render")
@@ -25,4 +26,5 @@ end
 function events.tick()
     if not player:isLoaded() or not ihost then return end
     stopwatch.tick()
+    wand.tick()
 end

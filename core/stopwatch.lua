@@ -5,7 +5,6 @@ local Stopwatch = {}
 
 local data = state.Data
 local cbx = data.checkBox
-local track = state.Config.TRACK
 
 
 local function formatTime(ticks)
@@ -25,25 +24,6 @@ end
 
 
 function Stopwatch.tick()
-    if data.renderBox and data.isCheckBoxCreated and world.getTime() % 10 == 0 then
-        local zones = {}
-        if track.sectors then
-            for _, s in pairs(track.sectors) do 
-                if s.inBox then table.insert(zones, s.inBox) end
-                if s.outBox then table.insert(zones, s.outBox) end
-            end
-        end
-
-        if track.finish and track.finish.box then table.insert(zones, track.finish.box) end
-        
-        if track.pitStop then
-            if track.pitStop.inBox then table.insert(zones, track.pitStop.inBox) end
-            if track.pitStop.outBox then table.insert(zones, track.pitStop.outBox) end
-        end
-        
-        for _, z in ipairs(zones) do render.spawnEdgeParticles(z[1], z[2]) end
-    end
-
     if not data.isClocking then return end
 
     data.inCheckBox = Stopwatch.isInside(player:getPos())

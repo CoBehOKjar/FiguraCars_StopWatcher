@@ -5,7 +5,12 @@ local Wand = {}
 
 local data = state.Data
 local cbx = data.checkBox
+local track = state.Config.TRACK
 local points = {vec(0,0,0), vec(0,0,0)}
+
+local ALTKEY = keybinds:newKeybind("ResetBox", "key.keyboard.left.alt")
+local CTRLKEY = keybinds:newKeybind("ResetBox", "key.keyboard.left.control")
+local SHIFTKEY = keybinds:newKeybind("ResetBox", "key.keyboard.left.shift")
 
 
 local function vecToString(v)
@@ -41,7 +46,11 @@ end
 
 
 
-function Wand.modify(dir, alt, ctrl, shift)
+function Wand.modify(dir)
+    local alt = ALTKEY:isPressed()
+    local ctrl = CTRLKEY:isPressed()
+    local shift = SHIFTKEY:isPressed()
+
     local pos = player:getPos()
     local look = player:getLookDir():normalize()
     local ax, ay, az = math.abs(look.x), math.abs(look.y), math.abs(look.z)
@@ -73,6 +82,33 @@ function Wand.modify(dir, alt, ctrl, shift)
 
     host:setActionbar("§6Зона: "..vecToString(cbx[1]).." / "..vecToString(cbx[2]))
     render.spawnEdgeParticles(cbx[1], cbx[2])
+end
+
+
+
+function Wand.tick()
+    if data.renderBox and world.getTime() % 10 == 0 then
+        local zones = {}
+        if track.sectors then
+            for _, s in pairs(track.sectors) do 
+                if s.inBox then table.insert(zones, s.inBox) end
+                if s.outBox then table.insert(zones, s.outBox) end
+            end
+        end
+
+        if track.finish and track.finish.box then table.insert(zones, track.finish.box) end
+        
+        if track.pitStop then
+            if track.pitStop.inBox then table.insert(zones, track.pitStop.inBox) end
+            if track.pitStop.outBox then table.insert(zones, track.pitStop.outBox) end
+        end
+
+        if data.isCheckBoxCreated then
+            table.insert(zones, cbx)
+        end
+        
+        for _, z in ipairs(zones) do render.spawnEdgeParticles(z[1], z[2]) end
+    end
 end
 
 return Wand

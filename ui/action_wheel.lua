@@ -1,5 +1,6 @@
 local state = require("state")
 local stopwatch = require("core.stopwatch")
+local wand = require("lib.wand")
 
 local ActionWheel = {}
 
@@ -48,9 +49,9 @@ function ActionWheel.init()
         )
 
         :item("minecraft:wooden_axe")
-        :onLeftClick(function() stopwatch.setBox(1, player:getPos(), true) end)
-        :onRightClick(function() stopwatch.setBox(2, player:getPos(), true) end)
-        :onScroll(stopwatch.changeBox)
+        :onLeftClick(function() wand.set(1, player:getPos(), true) end)
+        :onRightClick(function() wand.set(2, player:getPos(), true) end)
+        :onScroll(wand.modify)
 
     local toggleStopwatch = wheels[1]:newAction()
         :title("Запустить/остановить секундомер\n§7ЛКМ/ПКМ")

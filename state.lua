@@ -70,7 +70,7 @@ State.Config = {
 --*Runtime
 State.Data = {
     checkBox = {vec(0,0,0), vec(0,0,0)},
-    isCheckBoxCreated = true,
+    isCheckBoxCreated = false,
     renderBox = true,
 
     race = {
