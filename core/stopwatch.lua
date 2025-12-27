@@ -1,10 +1,11 @@
 local state = require("state")
-local render = require("ui.render")
 
 local Stopwatch = {}
 
 local data = state.Data
+local cfg = state.Config
 local cbx = data.checkBox
+local rl = data.race.racists
 
 
 local function formatTime(ticks)
@@ -26,20 +27,31 @@ end
 function Stopwatch.tick()
     if not data.isClocking then return end
 
-    data.inCheckBox = Stopwatch.isInside(player:getPos())
+    for _, p in pairs(world.getPlayers()) do
+        local name = p:getName()
+        if not cfg.RACISTS[name] then goto continue end
 
-    if data.inCheckBox and not data.wasInCheckBox then
-        local lM, lS = formatTime(data.currentTime - data.lastTime)
-        local tM, tS = formatTime(data.currentTime)
+        local racer = rl[name]
+        if not racer then goto continue end
 
-        print(string.format("§fLap §6%d §ftime: §a%dm%ds. §fTotal: §b%dm%ds.", 
-              data.currentLap, lM, lS, tM, tS))
+        racer.inCheckBox = Stopwatch.isInside(p:getPos())
 
-        data.lastTime = data.currentTime
-        data.currentLap = data.currentLap + 1
+        if racer.inCheckBox and not racer.wasInCheckBox then
+            local tM, tS = formatTime(data.currentTime)
+
+            print(string.format("§fLap §6%d §fTotal: §b%dm%ds.", 
+                racer.lap, tM, tS))
+
+            racer.lap = racer.lap + 1
+            
+        end
+
+        racer.wasInCheckBox = racer.inCheckBox
+
+        ::continue::
     end
 
-    data.wasInCheckBox = data.inCheckBox
+
     data.currentTime = data.currentTime + 1
 end
 

@@ -1,5 +1,4 @@
 local state = require("state")
-local stopwatch = require("core.stopwatch")
 local wand = require("lib.wand")
 
 local ActionWheel = {}
@@ -34,6 +33,8 @@ function ActionWheel.init()
                 action_wheel:setPage(wheels[nextIndex])
             end)
     end
+
+
 
     --.Adding buttons
     local setBox = wheels[1]:newAction()

@@ -69,6 +69,8 @@ State.Config = {
 
 --*Runtime
 State.Data = {
+    currentTime = 0,
+
     checkBox = {vec(0,0,0), vec(0,0,0)},
     isCheckBoxCreated = false,
     renderBox = true,
