@@ -42,8 +42,8 @@ State.Config = {
             id = "TeamName",
             color = "§f",
             racists = {
-                {name = "NickName", role = "main"},
-                {name = "AnotherName", role = "reserve"},
+                {name = "NickName",     role = "main"},
+                {name = "AnotherName",  role = "reserve"},
             }
         },
 
@@ -51,30 +51,31 @@ State.Config = {
             id = "Мамкины Ядерщики",
             color = "§6",
             racists = {
-                {name = "CoBeHok", role = "main"},
-                {name = "DodgerF", role = "reserve"},
-                {name = "Romul_Us", role = "reserve"}
+                {name = "CoBeHok",      role = "main"},
+                {name = "DodgerFox",    role = "reserve"},
+                {name = "Romul_Us",     role = "reserve"}
             }
         }
+    },
+
+    RACISTS = {
+        ["NickName"]    = true,
+        ["CoBeHok"]     = true,
+        ["DodgerFox"]   = true,
+        ["Romul_Us"]    = true,
     }
 }
 
 
 --*Runtime
 State.Data = {
-    --.Stopwatch states
-    isClocking = false,
-    currentTime = 0,
-    currentLap = 0,
-    lastTime = 0,
-    
-
     checkBox = {vec(0,0,0), vec(0,0,0)},
     isCheckBoxCreated = true,
-    inCheckBox = false,
-    wasInCheckBox = false,
+    renderBox = true,
 
-    renderBox = true
+    race = {
+        racists = {}
+    }
 }
 
 State.Settings = {

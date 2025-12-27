@@ -18,5 +18,10 @@ function Racist.add(playerName, teamId, role)
 
         prevPos = nil,
         inPit = false,
+
+        inCheckBox = false,
+        wasInCheckBox = false,
     }, Racist)
 end
+
+return Racist
