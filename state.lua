@@ -23,10 +23,12 @@ State.Config = {
         },
 
         finish = {
+            id = "F1",
             box = {vec(581,70,-2036), vec(604,76,-2030)}
         },
 
         pitStop = {
+            id = "P1",
             inBox = {vec(596,70,-1863), vec(606,76,-1848)},
             outBox = {vec(612,0,-2096), vec(624,76,-2091)},
         },
@@ -69,6 +71,7 @@ State.Config = {
 
 --*Runtime
 State.Data = {
+    isClocking = false,
     currentTime = 0,
 
     checkBox = {vec(0,0,0), vec(0,0,0)},
@@ -76,7 +79,8 @@ State.Data = {
     renderBox = true,
 
     race = {
-        racists = {}
+        racists = {},
+        boxes = {},
     }
 }
 

@@ -19,6 +19,7 @@ function events.entity_init()
     if not ihost then return end
     action_wheel.init()
     setup.init()
+    --util.tprint(state.Data.race)
 end
 
 

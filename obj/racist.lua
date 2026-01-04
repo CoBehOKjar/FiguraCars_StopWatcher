@@ -8,12 +8,14 @@ function Racist.add(playerName, teamId, role)
         role = role,
 
         lap = 0,
-        sector = 0,
+        sector = nil,
 
-        lastTrigger = nil,
-        lastTriggerTick = -999,
+        currentTrigger = "None",
+        lastTrigger = "None",
+        lastTriggerTick = 0,
 
-        totalTime = 0,
+        lastSegmentTime = 0,
+        lastLapTime = 0,
         pitTime = 0,
 
         prevPos = nil,
