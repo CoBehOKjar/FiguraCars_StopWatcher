@@ -1,16 +1,38 @@
 local state = require("state")
-local util = require("lib.utilities")
+local send = require("net.send")
 
 local Stopwatch = {}
 
-local data = state.Data
+local sdata = state.Data
 local cfg = state.Config
-local cbx = data.checkBox
+local cbx = sdata.checkBox
 
 
-local function formatTime(ticks)
-    local sec = ticks / 20
-    return math.floor(sec / 60), math.floor(sec % 60)
+
+function Stopwatch.isThrough(p1, p2, box)
+    local min = box[1]
+    local max = box[2]
+
+    local tmin = 0
+    local tmax = 1
+
+    local function axisCheck(p, d, minB, maxB)
+        if math.abs(d) < 1e-6 then
+            return p >= minB and p <= maxB
+        end
+        local ood = 1 / d
+        local t1 = (minB - p) * ood
+        local t2 = (maxB - p) * ood
+        if t1 > t2 then t1, t2 = t2, t1 end
+        tmin = math.max(tmin, t1)
+        tmax = math.min(tmax, t2)
+        return tmin <= tmax
+    end
+
+    local d = p2 - p1
+    return axisCheck(p1.x, d.x, min.x, max.x)
+       and axisCheck(p1.y, d.y, min.y, max.y)
+       and axisCheck(p1.z, d.z, min.z, max.z)
 end
 
 
@@ -25,68 +47,51 @@ end
 
 
 function Stopwatch.tick()
-    if not data.isClocking then return end
-    local rl = data.race.racists
-    local bx = data.race.boxes
-    
+    if not sdata.isClocking or sdata.isPaused then return end
+
+    local bx = sdata.race.boxes
+
     for _, p in pairs(world.getPlayers()) do
         local name = p:getName()
         if not cfg.RACISTS[name] then goto continue end
 
-        local racer = rl[name]
+        local racer = sdata.race.racists[name]
         if not racer then goto continue end
 
+        local pos = p:getPos()
+        local prev = racer.prevPos
+
+        racer.inCheckBox = false
 
         for _, box in ipairs(bx) do
-            if Stopwatch.isInside(p:getPos(), box.box) then
+            if Stopwatch.isInside(pos, box.box)
+                or (prev and Stopwatch.isThrough(prev, pos, box.box)) then
+
                 racer.inCheckBox = true
-                racer.currentTrigger = box.id
+                racer.currentTrigger = box
                 break
             end
-            racer.inCheckBox = false
         end
-
 
         if racer.inCheckBox and not racer.wasInCheckBox then
-            local tM, tS = formatTime(data.currentTime - racer.pitTime)
-            local sM, sS = formatTime(data.currentTime - racer.lastSegmentTime)
-            local lM, lS = formatTime(data.currentTime - racer.lastLapTime)
+            print(string.format(
+                "[%d] %s crossed %s (%s)",
+                sdata.currentTime,
+                racer.name,
+                racer.currentTrigger.id,
+                racer.currentTrigger.type
+            ))
 
-            if racer.currentTrigger == "F1" then
-                print(string.format("Lap §6%d: §b%dm%ds. Total time: §b%dm%ds.",
-                    racer.lap, lM, lS, tM, tS))
-
-                racer.lastLapTime = data.currentTime
-                racer.lastSegmentTime = data.currentTime
-                racer.lap = racer.lap + 1
-
-            elseif racer.currentTrigger == "P1" and racer.lastTrigger == "P1" then
-                print(string.format("Pit time: §b%dm%ds.",
-                    sM, sS))
-                print(string.format("Lap §6%d: §b%dm%ds. Total time: §b%dm%ds.",
-                    racer.lap, lM, lS, tM, tS))
-
-                racer.pitTime = racer.pitTime + (data.currentTime - racer.lastSegmentTime)
-                racer.lastSegmentTime = data.currentTime
-                racer.lastLapTime = data.currentTime
-                racer.lap = racer.lap + 1
-
-            else
-                print(string.format("Sector §6%s - %s§f: §b%dm%ds.", 
-                    racer.lastTrigger, racer.currentTrigger, sM, sS))
-
-                racer.lastSegmentTime = data.currentTime
-            end            
+            send.toSheet(racer.name, racer.team, racer.role, racer.currentTrigger.id, racer.currentTrigger.type, sdata.currentTime)
         end
 
-        racer.lastTrigger = racer.currentTrigger
+        racer.prevPos = pos
         racer.wasInCheckBox = racer.inCheckBox
 
         ::continue::
     end
 
-
-    data.currentTime = data.currentTime + 1
+    sdata.currentTime = sdata.currentTime + 1
 end
 
 return Stopwatch

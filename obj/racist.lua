@@ -7,22 +7,11 @@ function Racist.add(playerName, teamId, role)
         team = teamId,
         role = role,
 
-        lap = 0,
-        sector = nil,
-
-        currentTrigger = "None",
-        lastTrigger = "None",
-        lastTriggerTick = 0,
-
-        lastSegmentTime = 0,
-        lastLapTime = 0,
-        pitTime = 0,
-
         prevPos = nil,
-        inPit = false,
 
         inCheckBox = false,
         wasInCheckBox = false,
+        currentTrigger = nil,
     }, Racist)
 end
 

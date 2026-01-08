@@ -5,9 +5,20 @@ local ActionWheel = {}
 
 local data = state.Data
 
+local function resetRacers()
+    for _, racer in pairs(data.race.racists) do
+        racer.prevPos = nil
+        racer.inCheckBox = false
+        racer.wasInCheckBox = false
+        racer.currentTrigger = nil
+    end
+end
+
+
 function ActionWheel.titleUpdate(action, title)
     action:setTitle(title)
 end
+
 
 function ActionWheel.init()
     --.Creating action wheels
@@ -54,26 +65,46 @@ function ActionWheel.init()
         :onRightClick(function() wand.set(2, player:getPos(), true) end)
         :onScroll(wand.modify)
 
+
     local toggleStopwatch = wheels[1]:newAction()
-        :title("Запустить/остановить секундомер\n§7ЛКМ/ПКМ")
+        :title("Запустить/запаузить секундомер\n§7ЛКМ/ПКМ")
         :item("minecraft:clock")
         :onLeftClick(function()
             data.isClocking = true
+            data.isPaused = false
             print("Таймер запущен")
         end)
         :onRightClick(function()
-            data.isClocking = false
-            data.currentTime = 0
-            data.lastTime = 0
-            print("Таймер остановлен")
+            if not data.isClocking then return end
+            data.isPaused = not data.isPaused
+
+            if data.isPaused then
+                print("Таймер на паузе")
+            else
+                print("Таймер продолжен")
+            end
         end)
+
+
+    local stopStopwatch = wheels[1]:newAction()
+        :title("Сбросить секундомер")
+        :item("minecraft:barrier")
+        :onLeftClick(function()
+            data.isClocking = false
+            data.isPaused = false
+            data.currentTime = 0
+
+            resetRacers()
+
+            print("Таймер остановлен и сброшен")
+        end)
+
 
     local toggleRender = wheels[1]:newAction()
         :title("Постоянный рендер зоны секундомера")
         :item("minecraft:spawner")
         :onToggle(function() ActionWheel.toggleBoxRender(not data.renderBox) end)
 end
-
 
 
 function ActionWheel.toggleBoxRender(tgl)

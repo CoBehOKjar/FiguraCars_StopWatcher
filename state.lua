@@ -72,6 +72,7 @@ State.Config = {
 --*Runtime
 State.Data = {
     isClocking = false,
+    isPaused = false,
     currentTime = 0,
 
     checkBox = {vec(0,0,0), vec(0,0,0)},
