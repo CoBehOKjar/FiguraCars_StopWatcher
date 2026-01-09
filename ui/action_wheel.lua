@@ -1,5 +1,6 @@
 local state = require("state")
 local wand = require("lib.wand")
+local util = require("lib.utilities")
 
 local ActionWheel = {}
 
@@ -12,6 +13,10 @@ local function resetRacers()
         racer.wasInCheckBox = false
         racer.currentTrigger = nil
     end
+end
+
+local function vecToStr(v)
+    return string.format("%s, %s, %s", v.x, v.y, v.z)
 end
 
 
@@ -104,6 +109,30 @@ function ActionWheel.init()
         :title("Постоянный рендер зоны секундомера")
         :item("minecraft:spawner")
         :onToggle(function() ActionWheel.toggleBoxRender(not data.renderBox) end)
+
+    
+    local printBox = wheels[1]:newAction()
+        :title("Вывести в чат текущее выделение\n§7ЛКМ §f- для вставки в код\n§7ПКМ §f- просто числа")
+        :item("minecraft:writable_book")
+        :onLeftClick(function ()
+            print("box = {vec("..vecToStr(data.checkBox[1]).."), vec("..vecToStr(data.checkBox[2])..")}")            
+        end)
+        :onRightClick(function ()
+            print(vecToStr(data.checkBox[1]), vecToStr(data.checkBox[2])) 
+        end)
+
+
+    
+    local storeTest = wheels[2]:newAction()
+        :title("Send|Find data")
+        :item("minecraft:paper")
+        :onLeftClick(function ()
+            local time = world.getTime() 
+            pings.syncTime(time)
+        end)
+        :onRightClick(function ()
+            util.tprint(world.avatarVars())
+        end)
 end
 
 
