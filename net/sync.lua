@@ -32,13 +32,24 @@ end
 
 
 function Sync.tick()
-    if stgs.roleIndex ~= 1 then
-        for _, p in pairs(world.avatarVars()) do
-            if p.SWNet.role == 1 and p.SWNet.id > data.lastSignalId then
-                pings.sync(p)
-            end
+    if stgs.roleIndex == 1 then return end
+
+    for _, p in pairs(world.avatarVars()) do
+        local net = p.SWNet
+        if not net then goto continue end
+
+        if net.senderRole == 1
+        and net.id
+        and net.id > data.lastSignalId then
+
+            data.lastSignalId = net.id
+            pings.sync(net)
+            break
         end
+
+        ::continue::
     end
 end
+
 
 return Sync

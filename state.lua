@@ -80,9 +80,10 @@ State.Data = {
     isClocking = false,
     isPaused = false,
     currentTime = 0,
-    launchTime = 0,
+    actionTime = 0,
 
     lastSignalId = 0,
+    signalAction = nil,
 
     checkBox = {vec(0,0,0), vec(0,0,0)},
     isCheckBoxCreated = false,

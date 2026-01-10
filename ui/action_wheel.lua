@@ -1,6 +1,7 @@
 local state = require("state")
 local wand = require("lib.wand")
 local util = require("lib.utilities")
+local sync = require("net.sync")
 
 local ActionWheel = {}
 
@@ -145,7 +146,7 @@ function ActionWheel.init()
         :item("minecraft:paper")
         :onLeftClick(function ()
             local time = world.getTime() 
-            pings.sync({role = state.Settings.roleIndex, launchTime = world.getTime()})
+            sync.send("start", world.getTime())
         end)
         :onRightClick(function ()
             util.tprint(world.avatarVars())

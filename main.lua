@@ -1,4 +1,3 @@
---TODO синхронизация через время суток в кубах
 local state = require("state")
 local setup = require("core.setup")
 local stopwatch = require("core.stopwatch")
