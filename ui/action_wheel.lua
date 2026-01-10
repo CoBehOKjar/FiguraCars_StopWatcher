@@ -145,7 +145,7 @@ function ActionWheel.init()
         :item("minecraft:paper")
         :onLeftClick(function ()
             local time = world.getTime() 
-            pings.syncTime(time)
+            pings.sync({role = state.Settings.roleIndex, launchTime = world.getTime()})
         end)
         :onRightClick(function ()
             util.tprint(world.avatarVars())
@@ -173,6 +173,7 @@ function ActionWheel.selectRole(dir)
     end
 
     data.AW.slctRole:setTitle("Выбрать роль аватара: "..state.Config.ROLES[state.Settings.roleIndex].."\n§7ПКМ/ЛКМ§f | §6Скролл\n§fMain - Главный наблюдатель\nChain - Остальные наблюдатели\nRepeater - Антена для остальных наблюдателей")
+    print(state.Settings.roleIndex)
 end
 
 
