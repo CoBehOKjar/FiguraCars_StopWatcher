@@ -53,7 +53,7 @@ function ActionWheel.init()
 
 
     --.Adding buttons
-    local setBox = wheels[1]:newAction()
+    local setBox = wheels[2]:newAction()
         :title(
             "Выбрать зону секундомера\n" ..
             "§7ПКМ/ЛКМ§f - Выбор углов\n" ..
@@ -69,6 +69,7 @@ function ActionWheel.init()
         :onLeftClick(function() wand.set(1, player:getPos(), true) end)
         :onRightClick(function() wand.set(2, player:getPos(), true) end)
         :onScroll(wand.modify)
+    data.AW.setBox = setBox
 
 
     local toggleStopwatch = wheels[1]:newAction()
@@ -89,6 +90,7 @@ function ActionWheel.init()
                 print("Таймер продолжен")
             end
         end)
+    data.AW.toggleStopwatch = toggleStopwatch
 
 
     local stopStopwatch = wheels[1]:newAction()
@@ -103,15 +105,30 @@ function ActionWheel.init()
 
             print("Таймер остановлен и сброшен")
         end)
+    data.AW.stopStopwatch = stopStopwatch
 
 
     local toggleRender = wheels[1]:newAction()
         :title("Постоянный рендер зоны секундомера")
         :item("minecraft:spawner")
         :onToggle(function() ActionWheel.toggleBoxRender(not data.renderBox) end)
+    data.AW.toggleRender = toggleRender
+
+
+    local slctRole = wheels[1]:newAction()
+        :title("Выбрать роль аватара: "..state.Config.ROLES[state.Settings.roleIndex].."\n§7ПКМ/ЛКМ§f | §6Скролл\n§fMain - Главный наблюдатель\nChain - Остальные наблюдатели\nRepeater - Антена для остальных наблюдателей")
+        :item("minecraft:ender_eye")
+        :onLeftClick(function()
+            ActionWheel.selectRole(1)
+        end)
+        :onRightClick(function()
+            ActionWheel.selectRole(-1)
+        end)
+        :setOnScroll(ActionWheel.selectRole)
+    data.AW.slctRole = slctRole
 
     
-    local printBox = wheels[1]:newAction()
+    local printBox = wheels[2]:newAction()
         :title("Вывести в чат текущее выделение\n§7ЛКМ §f- для вставки в код\n§7ПКМ §f- просто числа")
         :item("minecraft:writable_book")
         :onLeftClick(function ()
@@ -120,7 +137,7 @@ function ActionWheel.init()
         :onRightClick(function ()
             print(vecToStr(data.checkBox[1]), vecToStr(data.checkBox[2])) 
         end)
-
+    data.AW.printBox = printBox
 
     
     local storeTest = wheels[2]:newAction()
@@ -133,11 +150,30 @@ function ActionWheel.init()
         :onRightClick(function ()
             util.tprint(world.avatarVars())
         end)
+    data.AW.storeTest = storeTest
 end
 
 
 function ActionWheel.toggleBoxRender(tgl)
     data.renderBox = tgl
 end
+
+function ActionWheel.selectRole(dir)
+    local roles = state.Config.ROLES
+    local count = #roles
+
+    if count == 0 then return end
+
+    state.Settings.roleIndex = state.Settings.roleIndex + (dir > 0 and 1 or -1)
+
+    if state.Settings.roleIndex > count then
+        state.Settings.roleIndex = 1
+    elseif state.Settings.roleIndex < 1 then
+        state.Settings.roleIndex = count
+    end
+
+    data.AW.slctRole:setTitle("Выбрать роль аватара: "..state.Config.ROLES[state.Settings.roleIndex].."\n§7ПКМ/ЛКМ§f | §6Скролл\n§fMain - Главный наблюдатель\nChain - Остальные наблюдатели\nRepeater - Антена для остальных наблюдателей")
+end
+
 
 return ActionWheel

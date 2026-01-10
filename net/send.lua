@@ -1,5 +1,6 @@
 local Send = {}
 
+local pendingBuffers = {}
 local eventBuffer = {}
 local flushTicks = 20
 
@@ -42,6 +43,7 @@ function Send.flush()
         :send()
 
     eventBuffer = {}
+    table.insert(pendingBuffers, { buf = buffer, ticks = 200, closed = false })
 end
 
 
@@ -51,6 +53,23 @@ function Send.tick()
     if tickCounter >= flushTicks then
         Send.flush()
         tickCounter = 0
+    end
+
+    for i = #pendingBuffers, 1, -1 do
+        local entry = pendingBuffers[i]
+        if entry.ticks > 0 then
+            entry.ticks = entry.ticks - 1
+        end
+        if entry.ticks <= 0 then
+            if not entry.closed then
+                local ok, err = pcall(function() entry.buf:close() end)
+                if not ok then
+                    print("WARN: buffer:close() failed:", tostring(err))
+                end
+                entry.closed = true
+            end
+            table.remove(pendingBuffers, i)
+        end
     end
 end
 

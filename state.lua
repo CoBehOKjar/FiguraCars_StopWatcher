@@ -65,6 +65,12 @@ State.Config = {
         ["CoBeHok"]     = true,
         ["DodgerFox"]   = true,
         ["Romul_Us"]    = true,
+    },
+
+    ROLES = {
+        "Main",
+        "Chain",
+        "Repeater",
     }
 }
 
@@ -83,11 +89,13 @@ State.Data = {
     race = {
         racists = {},
         boxes = {},
-    }
+    },
+
+    AW = {}
 }
 
 State.Settings = {
-
+    roleIndex = 1,
 }
 
 return State

@@ -9,6 +9,8 @@ local util = require("lib.utilities")
 
 local action_wheel = require("ui.action_wheel")
 
+local sync = require("net.sync")
+
 
 local ihost = host:isHost()
 
@@ -29,4 +31,5 @@ function events.tick()
     stopwatch.tick()
     wand.tick()
     send.tick()
+    sync.tick()
 end

@@ -2,9 +2,16 @@ local state = require("state")
 
 local Sync = {}
 
-function pings.syncTime(time)
-    state.Data.launchTime = time
-    avatar:store("launchTime", state.Data.launchTime)
+function pings.sync(signals)
+    for signal, d in pairs(signals) do
+        avatar:store(signal, d)
+    end
+end
+
+
+
+function Sync.tick()
+    
 end
 
 return Sync
