@@ -5,6 +5,7 @@ local Stopwatch = {}
 
 local sdata = state.Data
 local cfg = state.Config
+local stgs = state.Settings
 local cbx = sdata.checkBox
 
 
@@ -47,7 +48,7 @@ end
 
 
 function Stopwatch.tick()
-    if not sdata.isClocking or sdata.isPaused then return end
+    if not sdata.isClocking or sdata.isPaused or stgs.roleIndex == 3 then return end
 
     local bx = sdata.race.boxes
 
