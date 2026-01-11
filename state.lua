@@ -84,6 +84,7 @@ State.Data = {
 
     lastSignalId = 0,
     signalAction = nil,
+    startWorldTime = 0,
 
     checkBox = {vec(0,0,0), vec(0,0,0)},
     isCheckBoxCreated = false,
@@ -98,7 +99,7 @@ State.Data = {
 }
 
 State.Settings = {
-    roleIndex = 1,
+    roleIndex = 3,
 }
 
 return State

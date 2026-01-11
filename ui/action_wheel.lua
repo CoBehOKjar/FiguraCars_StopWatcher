@@ -79,6 +79,8 @@ function ActionWheel.init()
         :onLeftClick(function()
             data.isClocking = true
             data.isPaused = false
+            sync.send("start")
+
             print("Таймер запущен")
         end)
         :onRightClick(function()
@@ -86,8 +88,10 @@ function ActionWheel.init()
             data.isPaused = not data.isPaused
 
             if data.isPaused then
+                sync.send("pause")
                 print("Таймер на паузе")
             else
+                sync.send("start")
                 print("Таймер продолжен")
             end
         end)
@@ -103,6 +107,7 @@ function ActionWheel.init()
             data.currentTime = 0
 
             resetRacers()
+            sync.send("stop")
 
             print("Таймер остановлен и сброшен")
         end)
@@ -146,12 +151,17 @@ function ActionWheel.init()
         :item("minecraft:paper")
         :onLeftClick(function ()
             local time = world.getTime() 
-            sync.send("start", world.getTime())
+            sync.send("test")
         end)
         :onRightClick(function ()
             util.tprint(world.avatarVars())
         end)
     data.AW.storeTest = storeTest
+
+    local resetNet = wheels[2]:newAction()
+        :title("Reset last signal ID")
+        :item("minecraft:sponge")
+        :onLeftClick(function () data.lastSignalId = 0 end)
 end
 
 
